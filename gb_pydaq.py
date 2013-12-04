@@ -1,3 +1,4 @@
+# wrote this when first playing around with pydaq. Not currently used.
 import PyDAQmx as daq
 import numpy as np
 import time
@@ -28,27 +29,27 @@ class eogTask(daq.Task):
         daq.Task.__init__(self)
         eogSampRate = 240
         eogSampsPerChanToAcquire = 1
-        self.eogData = np.zeros((0), dtype=np.float64)
+        self.eogData = np.zeros(2)
         self.CreateAIVoltageChan("Dev1/ai3", "", daq.DAQmx_Val_RSE, -5.0, 5.0, daq.DAQmx_Val_Volts, None)
         self.CreateAIVoltageChan("Dev1/ai4", "", daq.DAQmx_Val_RSE, -5.0, 5.0, daq.DAQmx_Val_Volts, None)
         self.CfgSampClkTiming("", eogSampRate, daq.DAQmx_Val_Rising, daq.DAQmx_Val_ContSamps, eogSampsPerChanToAcquire)
-        self.AutoRegisterEveryNSamplesEvent(daq.DAQmx_Val_Acquired_Into_Buffer, 1000, 0)
+        self.AutoRegisterEveryNSamplesEvent(daq.DAQmx_Val_Acquired_Into_Buffer, 1, 0)
         self.AutoRegisterDoneEvent(0)
-        print 'init done'
+        #print 'init done'
 
     def EveryNCallback(self):
-        print 'callback'
+        #print 'callback'
         read = daq.int32()
-        print 'read', read
+        #print 'read', read
         self.ReadAnalogF64(1, 10.0, daq.DAQmx_Val_GroupByScanNumber, self.eogData, 2, daq.byref(read), None)
-        print 'x,y', self.eogData[0], self.eogData[1]
-        print 'okay'
+        #print 'x,y', self.eogData[0], self.eogData[1]
+        #print 'okay'
         return 0  # the function should return an integer
 
     def DoneCallback(self, status):
-        print 'done callback'
-        print 'Status', status.value
-        print 'what'
+        #print 'done callback'
+        #print 'Status', status.value
+        #print 'what'
         return 0  # the function should return an integer
 
 
