@@ -10,7 +10,7 @@ data = numpy.zeros((1000,), dtype=numpy.float64)
 
 # DAQmx Configure Code
 # we use Dev1/ai3 and Dev1/ai4 for eye tracking computer
-analog_input.CreateAIVoltageChan("Dev1/ai3","",DAQmx_Val_Cfg_Default,-10.0,10.0,DAQmx_Val_Volts,None)
+analog_input.CreateAIVoltageChan("Dev1/ai4","",DAQmx_Val_Cfg_Default,-10.0,10.0,DAQmx_Val_Volts,None)
 analog_input.CfgSampClkTiming("",10000.0,DAQmx_Val_Rising,DAQmx_Val_FiniteSamps,1000)
 
 # DAQmx Start Code

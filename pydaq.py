@@ -84,8 +84,8 @@ class OutputEvents(Daq.Task):
         self.encode = np.zeros(1, dtype=np.uint32)
         self.strobeOn = np.ones(1, dtype=np.uint32)
         self.strobeOff = np.zeros(1, dtype=np.uint32)
-        self.CreateDOCChan("Dev1/port1", "", Daq.DAQmx_Val_ChanForAllLines)
-        self.CreateDOCChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
+        self.CreateDOChan("Dev1/port1", "", Daq.DAQmx_Val_ChanForAllLines)
+        self.CreateDOChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
 
     def send_signal(self, event):
         read = Daq.int32()
@@ -97,10 +97,10 @@ class OutputEvents(Daq.Task):
                              self.strobeOn, Daq.byref(read), None)
         self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
                              self.strobeOff, Daq.byref(read), None)
-        self.stopTask()
+        self.StopTask()
 
 
-class OutputAvatarPos(Daq.Task):
+class OutputAvatarXPos(Daq.Task):
     """ Sends out avatar position to Plexon or Blackrock so we can analyze primarily with that data.
     Need to make this a callback
     """
@@ -108,12 +108,31 @@ class OutputAvatarPos(Daq.Task):
         Daq.Task.__init__(self)
         self.xPosData = np.zeros(1, dtype=np.float64)
         self.CreateAOVoltageChan("Dev1/ao0", "", -10, 10, Daq.DAQmx_Val_Volts, None)
+
+    def send_signal(self, event):
+        read = Daq.int32()
+        self.StartTask()
+        print event
+        self.xPosData[0] = event
+        self.WriteAnalogF64(1, 0, -1, Daq.DAQmx_Val_GroupByChannel,
+                            self.xPosData, Daq.byref(read), None)
+        self.StopTask()
+
+
+class OutputAvatarYPos(Daq.Task):
+    """ Sends out avatar position to Plexon or Blackrock so we can analyze primarily with that data.
+    Need to make this a callback
+    """
+    def __init__(self):
+        Daq.Task.__init__(self)
         self.yPosData = np.zeros(1, dtype=np.float64)
         self.CreateAOVoltageChan("Dev1/ao1", "", -10, 10, Daq.DAQmx_Val_Volts, None)
 
     def send_signal(self, event):
         read = Daq.int32()
         self.StartTask()
-        self.WriteDigitalLines(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
-                               event[0], Daq.byref(read), None)
-        self.stopTask()
+        print event
+        self.yPosData[0] = event
+        self.WriteAnalogF64(1, 0, -1, Daq.DAQmx_Val_GroupByChannel,
+                            self.yPosData, Daq.byref(read), None)
+        self.StopTask()
