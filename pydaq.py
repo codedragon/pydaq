@@ -1,6 +1,7 @@
 import PyDAQmx as Daq
 import numpy as np
 import time
+
 # need to refactor. inconsistent naming. started adapting camelcase
 # as used in pydaqmx, but then out of habit switched to underscores.
 # And pumpOut borrowed name from Kiril's code, and it doesn't fit with
@@ -82,17 +83,31 @@ class OutputEvents(Daq.Task):
     def __init__(self):
         Daq.Task.__init__(self)
         self.encode = np.zeros(1, dtype=np.uint32)
-        self.strobeOn = np.ones(1, dtype=np.uint32)
-        self.strobeOff = np.zeros(1, dtype=np.uint32)
         self.CreateDOChan("Dev1/port1", "", Daq.DAQmx_Val_ChanForAllLines)
-        self.CreateDOChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
 
     def send_signal(self, event):
+        #print event
         read = Daq.int32()
-        self.encode = event[0]
+        self.encode[0] = event
+        #print self.encode
         self.StartTask()
         self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
                              self.encode, Daq.byref(read), None)
+        self.StopTask()
+
+
+class StrobeEvents(Daq.Task):
+    """ Sends out a strobe to signify we just sent an event code to Plexon or Blackrock
+    """
+    def __init__(self):
+        Daq.Task.__init__(self)
+        self.strobeOn = np.ones(1, dtype=np.uint32)
+        self.strobeOff = np.zeros(1, dtype=np.uint32)
+        self.CreateDOChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
+
+    def send_signal(self):
+        read = Daq.int32()
+        self.StartTask()
         self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
                              self.strobeOn, Daq.byref(read), None)
         self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
@@ -107,13 +122,14 @@ class OutputAvatarXPos(Daq.Task):
     def __init__(self):
         Daq.Task.__init__(self)
         self.xPosData = np.zeros(1, dtype=np.float64)
-        self.CreateAOVoltageChan("Dev1/ao0", "", -10, 10, Daq.DAQmx_Val_Volts, None)
+        self.CreateAOVoltageChan("Dev1/ao0", "", -5, 5, Daq.DAQmx_Val_Volts, None)
 
     def send_signal(self, event):
         read = Daq.int32()
         self.StartTask()
-        print event
+        #print event
         self.xPosData[0] = event
+        #print('x',self.xPosData)
         self.WriteAnalogF64(1, 0, -1, Daq.DAQmx_Val_GroupByChannel,
                             self.xPosData, Daq.byref(read), None)
         self.StopTask()
@@ -126,13 +142,14 @@ class OutputAvatarYPos(Daq.Task):
     def __init__(self):
         Daq.Task.__init__(self)
         self.yPosData = np.zeros(1, dtype=np.float64)
-        self.CreateAOVoltageChan("Dev1/ao1", "", -10, 10, Daq.DAQmx_Val_Volts, None)
+        self.CreateAOVoltageChan("Dev1/ao1", "", -5, 5, Daq.DAQmx_Val_Volts, None)
 
     def send_signal(self, event):
         read = Daq.int32()
         self.StartTask()
-        print event
+        #print event
         self.yPosData[0] = event
+        #print('y',self.yPosData)
         self.WriteAnalogF64(1, 0, -1, Daq.DAQmx_Val_GroupByChannel,
                             self.yPosData, Daq.byref(read), None)
         self.StopTask()
