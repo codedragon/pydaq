@@ -78,7 +78,8 @@ class EOGTask(Daq.Task):
 
 class OutputEvents(Daq.Task):
     """ Sends out signals of events to Plexon or Blackrock so we can line up data.
-    Send strobe after event code.
+    Send strobe after event code. Can use any of the port1 lines (line0 through line7)
+    or port2 line1 through line7 for data.
     """
     def __init__(self):
         Daq.Task.__init__(self)
@@ -95,15 +96,19 @@ class OutputEvents(Daq.Task):
                              self.encode, Daq.byref(read), None)
         self.StopTask()
 
+    def close(self):
+        self.ClearTask()
+
 
 class StrobeEvents(Daq.Task):
     """ Sends out a strobe to signify we just sent an event code to Plexon or Blackrock
+    Must use line0, port2 line for strobe
     """
     def __init__(self):
         Daq.Task.__init__(self)
         self.strobeOn = np.ones(1, dtype=np.uint32)
         self.strobeOff = np.zeros(1, dtype=np.uint32)
-        self.CreateDOChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
+        self.CreateDOChan("Dev1/port2/line0", "", Daq.DAQmx_Val_ChanForAllLines)
 
     def send_signal(self):
         read = Daq.int32()
@@ -113,6 +118,9 @@ class StrobeEvents(Daq.Task):
         self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
                              self.strobeOff, Daq.byref(read), None)
         self.StopTask()
+
+    def close(self):
+        self.ClearTask()
 
 
 class OutputAvatarXPos(Daq.Task):
