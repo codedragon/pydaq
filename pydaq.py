@@ -108,7 +108,7 @@ class StrobeEvents(Daq.Task):
         Daq.Task.__init__(self)
         self.strobeOn = np.ones(1, dtype=np.uint32)
         self.strobeOff = np.zeros(1, dtype=np.uint32)
-        self.CreateDOChan("Dev1/port2/line0", "", Daq.DAQmx_Val_ChanForAllLines)
+        self.CreateDOChan("Dev1/port0/line1", "", Daq.DAQmx_Val_ChanForAllLines)
 
     def send_signal(self):
         read = Daq.int32()
