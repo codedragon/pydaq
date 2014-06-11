@@ -100,6 +100,30 @@ class OutputEvents(Daq.Task):
         self.ClearTask()
 
 
+class OutputMoreEvents(Daq.Task):
+    """ Sends out signals of events to Plexon or Blackrock so we can line up data.
+    Send strobe after event code. Can use any of the port1 lines (line0 through line7)
+    or port2 line1 through line7 for data.
+    """
+    def __init__(self):
+        Daq.Task.__init__(self)
+        self.encode = np.zeros(1, dtype=np.uint32)
+        self.CreateDOChan("Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
+
+    def send_signal(self, event):
+        #print event
+        read = Daq.int32()
+        self.encode[0] = event
+        #print self.encode
+        self.StartTask()
+        self.WriteDigitalU32(1, 0, 10.0, Daq.DAQmx_Val_GroupByChannel,
+                             self.encode, Daq.byref(read), None)
+        self.StopTask()
+
+    def close(self):
+        self.ClearTask()
+
+
 class StrobeEvents(Daq.Task):
     """ Sends out a strobe to signify we just sent an event code to Plexon or Blackrock
     Must use line0, port2 line for strobe

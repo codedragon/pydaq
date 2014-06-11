@@ -2,8 +2,13 @@ import pydaq
 
 send_events = pydaq.OutputEvents()
 send_strobe = pydaq.StrobeEvents()
+send_more = pydaq.OutputMoreEvents()
+
 send_events.send_signal(200)
 print 200
+send_strobe.send_signal()
+send_more.send_signal(300)
+print 300
 send_strobe.send_signal()
 for i in range(5):
     print(0 + i)
@@ -18,4 +23,5 @@ for i in range(0, 251, 25):
     send_events.send_signal(i)
     send_strobe.send_signal()
 send_events.close()
+send_more.close()
 send_strobe.close()
