@@ -1,1 +1,5 @@
-Code to interface with equipment, such as Eye tracker, with Nidaq card. Used in both goBananas and Calibration.
+Code to interface with equipment, such as Eye tracker, with Nidaq card.
+Used in both goBananas and Calibration.
+
+C Examples:
+/c/Users/Public/Documents/National Instruments/NI-DAQ/Examples/DAQmx ANSI C

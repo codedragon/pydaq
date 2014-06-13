@@ -78,13 +78,12 @@ class EOGTask(Daq.Task):
 
 class OutputEvents(Daq.Task):
     """ Sends out signals of events to Plexon or Blackrock so we can line up data.
-    Send strobe after event code. Can use any of the port1 lines (line0 through line7)
-    or port2 line1 through line7 for data.
+    Send strobe after event code. Using both port1 and port2 to use a full 16 bits.
     """
     def __init__(self):
         Daq.Task.__init__(self)
         self.encode = np.zeros(1, dtype=np.uint32)
-        self.CreateDOChan("Dev1/port1", "", Daq.DAQmx_Val_ChanForAllLines)
+        self.CreateDOChan("Dev1/port1, Dev1/port2", "", Daq.DAQmx_Val_ChanForAllLines)
 
     def send_signal(self, event):
         #print event
@@ -101,9 +100,8 @@ class OutputEvents(Daq.Task):
 
 
 class OutputMoreEvents(Daq.Task):
-    """ Sends out signals of events to Plexon or Blackrock so we can line up data.
-    Send strobe after event code. Can use any of the port1 lines (line0 through line7)
-    or port2 line1 through line7 for data.
+    """ If you want to split the 16 lines into 2 8-bit lines, can use this
+     object in addition to the previous one.
     """
     def __init__(self):
         Daq.Task.__init__(self)
