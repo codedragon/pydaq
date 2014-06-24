@@ -1,5 +1,11 @@
 Code to interface with equipment, such as Eye tracker, with Nidaq card.
-Used in both goBananas and Calibration.
+Used in both goBananas and Calibration. Need NI-DAQ installed, and the
+Nidaq card, obviously.
 
 C Examples:
 /c/Users/Public/Documents/National Instruments/NI-DAQ/Examples/DAQmx ANSI C
+
+pydaq              code actually used in Calibration and goBananas
+test_digital       code to test sending digital signals
+test_eye           code to test receiving data from eye scan computer
+test_reward        code to test sending reward pulse

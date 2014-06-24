@@ -2,6 +2,9 @@ from PyDAQmx import *
 import numpy as np
 import time
 
+# A little test function to make sure reward is hooked up correctly. Reward
+# as used in goBananas is in pydaq.py
+
 pumpTaskHandle = TaskHandle()
 
 try:
