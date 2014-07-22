@@ -1,6 +1,9 @@
 Code to interface with equipment, such as Eye tracker, with Nidaq card.
-Used in both goBananas and Calibration. Need NI-DAQ installed, and the
+Used in both goBananas and Calibration. Need NIDAQmx and NI-DAQ installed, and the
 Nidaq card, obviously.
+
+Uses awesome python interface to the NIDAQmx ANSI C driver
+https://pythonhosted.org/PyDAQmx/
 
 C Examples:
 /c/Users/Public/Documents/National Instruments/NI-DAQ/Examples/DAQmx ANSI C
