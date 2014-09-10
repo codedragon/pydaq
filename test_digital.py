@@ -24,10 +24,12 @@ for i in range(1, 6):
     print(i * 10)
     send_events.send_signal(i * 10)
     send_strobe.send_signal()
-for i in range(0, 2000, 100):
+# works to 64,000
+for i in range(0, 100000, 10000):
     print(i)
     send_events.send_signal(i)
     send_strobe.send_signal()
+print 'ok'
 send_events.close()
 #send_more.close()
 send_strobe.close()

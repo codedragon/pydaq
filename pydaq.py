@@ -13,7 +13,7 @@ class GiveReward(Daq.Task):
     """
     def __init__(self):
         Daq.Task.__init__(self)
-        self.pulse = np.zeros(1, dtype = np.uint8)
+        self.pulse = np.zeros(1, dtype=np.uint8)
         self.CreateDOChan("Dev1/port0/line0", "", Daq.DAQmx_Val_ChanPerLine)
 
     def pumpOut(self):
