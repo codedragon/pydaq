@@ -33,6 +33,9 @@ class GiveReward(Daq.Task):
         self.StopTask()
         #print "sent reward impulse"
 
+    def close(self):
+        self.ClearTask()
+
 
 class EOGTask(Daq.Task):
     """Collects Voltage representing Eye Position data from the IScan computer.
@@ -74,6 +77,10 @@ class EOGTask(Daq.Task):
 
     def SetCallback(self, event):
         self.event = event
+
+    def close(self):
+        self.StopTask()
+        self.ClearTask()
 
 
 class OutputEvents(Daq.Task):
